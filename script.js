@@ -9,7 +9,7 @@ const calculatorContainer = document.createElement('div');
 calculatorContainer.classList.add('calculator')
 calculatorContainer.style.border = "solid 3px black";
 calculatorContainer.style.width = "350px";
-calculatorContainer.style.height = "500px";
+calculatorContainer.style.minHeight = "500px";
 calculatorContainer.style.margin = "10px";
 calculatorContainer.style.borderRadius = "10px";
 container.appendChild(calculatorContainer);
@@ -25,6 +25,10 @@ equationContainer.style.border = "solid 1px black";
 equationContainer.style.margin = "1px";
 equationContainer.style.minHeight = "25px";
 equationContainer.style.borderRadius = "10px";
+equationContainer.style.padding = "2px";
+equationContainer.style.display = "flex";
+equationContainer.style.flexWrap = "wrap-reverse";
+equationContainer.style.justifyContent = "end";
 screenContainer.appendChild(equationContainer);
 
 const answerContainer = document.createElement('div');
@@ -53,19 +57,46 @@ let btnCreator = function(button, text) {
     button.textContent = text;
 buttonContainer.appendChild(button);
 };
-
+let multiAnswer = 0;
 let typedValue = [];
+const typedV = document.createElement('div');
+equationContainer.appendChild(typedV);
+
+const multiply = function(array) {
+  return array.reduce((total, prop) => total * prop);
+}; 
+
+let calculations = function() {
+  if((typedValue.includes('x'))) {
+    //Grab the position of where the x sign is
+    let xPosition = typedValue.indexOf('x');
+    let firstX = typedValue[xPosition - 1];
+    let secondX = typedValue[xPosition + 1];
+    multiRay = [];
+    multiRay.push(firstX);
+    multiRay.push(secondX);
+    console.log(multiRay);
+    let multiRayInt = multiRay.map(val => parseInt(val));
+    console.log(multiRayInt);
+    multiAnswer = multiply(multiRayInt);
+
+  }
+  console.log(multiAnswer);
+};
 
 let storeValue = function(number) {
     typedValue.push(number);
-}
+    typedV.textContent = typedValue.join(' ');
+};
 
 let clearValue = function() {
     typedValue = [];
+    typedV.textContent = typedValue.join(' ');
 };
 
 let clearLastValue = function() {
     typedValue.pop();
+    typedV.textContent = typedValue.join(' ');
 };
 
 const buttonAC = document.createElement('btn');
@@ -99,7 +130,7 @@ buttonSeven.addEventListener('click', function() {
   });
 
 const buttonEight = document.createElement('btn');
-btnCreator(buttonEight, "8");
+btnCreator(buttonEight, 8);
 buttonEight.addEventListener('click', function() {
     storeValue(8);
   });
@@ -181,6 +212,7 @@ btnCreator(buttonEqual, "=");
 buttonEqual.style.width = "44%";
 buttonEqual.addEventListener('click', function() {
     storeValue("=");
+    calculations();
   });
 
 
