@@ -25,10 +25,12 @@ equationContainer.style.border = "solid 1px black";
 equationContainer.style.margin = "1px";
 equationContainer.style.minHeight = "25px";
 equationContainer.style.borderRadius = "10px";
-equationContainer.style.padding = "2px";
+equationContainer.style.padding = "5px";
 equationContainer.style.display = "flex";
 equationContainer.style.flexWrap = "wrap-reverse";
 equationContainer.style.justifyContent = "end";
+equationContainer.style.alignItems = "center";
+equationContainer.style.paddingRight = "10px";
 screenContainer.appendChild(equationContainer);
 
 const answerContainer = document.createElement('div');
@@ -36,6 +38,13 @@ answerContainer.style.border = "solid 1px black";
 answerContainer.style.margin = "1px";
 answerContainer.style.minHeight = "35px";
 answerContainer.style.borderRadius = "10px";
+answerContainer.style.display = "flex";
+answerContainer.style.flexWrap = "wrap-reverse";
+answerContainer.style.justifyContent = "end";
+answerContainer.style.padding = "5px";
+answerContainer.style.paddingRight = "10px";
+answerContainer.style.alignItems = "center";
+answerContainer.style.fontSize = "28px"
 screenContainer.appendChild(answerContainer);
 
 const buttonContainer = document.createElement('div');
@@ -57,10 +66,14 @@ let btnCreator = function(button, text) {
     button.textContent = text;
 buttonContainer.appendChild(button);
 };
+
 let multiAnswer = 0;
 let typedValue = [];
 const typedV = document.createElement('div');
 equationContainer.appendChild(typedV);
+
+const typedA = document.createElement('div');
+answerContainer.appendChild(typedA);
 
 const multiply = function(array) {
   return array.reduce((total, prop) => total * prop);
@@ -79,24 +92,48 @@ let calculations = function() {
     let multiRayInt = multiRay.map(val => parseInt(val));
     console.log(multiRayInt);
     multiAnswer = multiply(multiRayInt);
-
-  }
-  console.log(multiAnswer);
+  };
+  typedA.textContent = multiAnswer;
 };
+
+//Issues with the above logic: 
+//Doesn't register numbers above one digit
+//Doesn't allow multiple uses of multiplication within the same equation
+
+//---------------Steps to complete: 
+
+//When a button is pressed the value is put into the typedValue array which is then answer displayed in the AnswerContainer
+
+
+//After another value has been typed in and the next operator has been selected:
+
+//-------------------
+//Rules for if the first operation is: 
+//Multiplication => (x * y = z) => push z to the totalArray
+//Division => (x / y = z) => push z to the totalArray 
+//Addition/Subtraction => (x + y = z) => push z to the totalArray unless the next operator is Multiplication or Division
+//Addition/Subtraction => (x + y */ a) => y */ a gets pushed to totalArray and x gets pushed to totalArray separately
+//Subtraction => (x - y */ a) => y */ a gets pushed to negativeTotalArray and x gets pushed to totalArray separately
+//-------------------
+
+//totalArray - negativeTotalArray will be what displays the final answer in the answerContainer
+
 
 let storeValue = function(number) {
     typedValue.push(number);
-    typedV.textContent = typedValue.join(' ');
+    typedV.textContent = typedValue.join('');
 };
 
 let clearValue = function() {
     typedValue = [];
-    typedV.textContent = typedValue.join(' ');
+    typedV.textContent = typedValue.join('');
+    multiAnswer = "";
+    typedA.textContent = multiAnswer;
 };
 
 let clearLastValue = function() {
     typedValue.pop();
-    typedV.textContent = typedValue.join(' ');
+    typedV.textContent = typedValue.join('');
 };
 
 const buttonAC = document.createElement('btn');
@@ -211,7 +248,7 @@ const buttonEqual = document.createElement('btn');
 btnCreator(buttonEqual, "=");
 buttonEqual.style.width = "44%";
 buttonEqual.addEventListener('click', function() {
-    storeValue("=");
+    //storeValue("=");
     calculations();
   });
 
