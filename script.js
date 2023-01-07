@@ -69,6 +69,9 @@ buttonContainer.appendChild(button);
 
 let multiAnswer = 0;
 let typedValue = [];
+let sortedTypedValue = 0;
+let joinedNumbers = 0;
+
 const typedV = document.createElement('div');
 equationContainer.appendChild(typedV);
 
@@ -79,7 +82,29 @@ const multiply = function(array) {
   return array.reduce((total, prop) => total * prop);
 }; 
 
+function combineNumbers(arr) {
+  const combined = [];
+  let currentNumber = '';
+  for (const element of arr) {
+    if (typeof element === 'number') {
+      currentNumber += element;
+    } else {
+      combined.push(currentNumber);
+      currentNumber = '';
+      combined.push(element);
+    }
+  }
+  // push the final number, if there is one
+  if (currentNumber) {
+    combined.push(currentNumber);
+  }
+  return combined;
+}
+
 let calculations = function() {
+//Create another array that joins together the numbers between operators
+  console.log(typedValue);
+
   if((typedValue.includes('x'))) {
     //Grab the position of where the x sign is
     let xPosition = typedValue.indexOf('x');
@@ -100,24 +125,58 @@ let calculations = function() {
 //Doesn't register numbers above one digit
 //Doesn't allow multiple uses of multiplication within the same equation
 
-//---------------Steps to complete: 
+//--------Steps to Complete----------//
 
-//When a button is pressed the value is put into the typedValue array which is then answer displayed in the AnswerContainer
+//When a button is pressed:
+// - the value is put into the typedValue array which is then displayed in the valueContainer
+// - 
 
 
-//After another value has been typed in and the next operator has been selected:
+//--------Basic Equations----------//
 
-//-------------------
-//Rules for if the first operation is: 
-//Multiplication => (x * y = z) => push z to the totalArray
-//Division => (x / y = z) => push z to the totalArray 
+//Multiplication followed by division => (x * y / a = z) =>  
+ 
 //Addition/Subtraction => (x + y = z) => push z to the totalArray unless the next operator is Multiplication or Division
 //Addition/Subtraction => (x + y */ a) => y */ a gets pushed to totalArray and x gets pushed to totalArray separately
 //Subtraction => (x - y */ a) => y */ a gets pushed to negativeTotalArray and x gets pushed to totalArray separately
-//-------------------
+//----------------------------------//
+
+//--------Leftover Equations----------//
+//These equations include a number that either has 
+//a multiplication or division operation in it and also includes a negative number or
+//
+
+//I need a function that deals with left over values by summing the values of the totalArray
+//and then performing their operation on it 
+//and then updating the totalArray with that answer.
+
+//Leftover equations include: 
+//Multiplication => (x * y = z) => push z to the totalArray
+//Division => (x / y = z) => push z to the totalArray
+
+
+//-------------------------------------//
+
+//Write a function that searches for all the x values in an array and then remove then splices the items in the array: 
+//two and one position before the x, including the x and one position after the x. 
+//after we have those values inside there own array then multiply them and add them to the the total array
+
 
 //totalArray - negativeTotalArray will be what displays the final answer in the answerContainer
 
+// Every even array number is an operation
+// Every three values through an array need to be run through a function if there is no multiplication or division
+// -------Target * signs that first
+// Make it so that they get operated on first
+
+//Tests
+//12 + 7 - 5 * 3 = 42
+//12 + 7 + 5 * 3 = 34
+//12 + 7 - 5 * 3 * 2 = -11
+//50 + 7 / 2 - 5 * 3 * 2 = 23.5
+//50 + 7 / 2 -  5 * 3 / 2 * 3 = 31
+//30 * 3 - 50 / 2 + 7 / 2 - 5 * 3 / 2 * 3 = 46
+//101 + 40 + 3 - 30 * 3 - 50 / 2 + 7 / 2 -  5 * 3 / 2 * 3 = 10
 
 let storeValue = function(number) {
     typedValue.push(number);
@@ -250,6 +309,8 @@ buttonEqual.style.width = "44%";
 buttonEqual.addEventListener('click', function() {
     //storeValue("=");
     calculations();
+    sortedTypedValue = combineNumbers(typedValue);
+    console.log("Bro " + sortedTypedValue)
   });
 
 
