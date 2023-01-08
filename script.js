@@ -101,25 +101,77 @@ function combineNumbers(arr) {
   return combined;
 }
 
-let calculations = function() {
-//Create another array that joins together the numbers between operators
-  console.log(typedValue);
+// let calculations = function() {
+// //Create another array that joins together the numbers between operator
+// console.log("This is the array that the calc function is using " + sortedTypedValue)
+//   const xRay = [];
+//   let currentNumber = '';
+//   for (const element of sortedTypedValue) {
+//     if((element === 'x')) {
+//       currentNumber = sortedTypedValue.indexOf('x')
+//       xRay.push(sortedTypedValue[currentNumber - 1]);
+//       xRay.push(sortedTypedValue[currentNumber + 1]);
+      
+//       console.log("This do be the " + xRay);
+//       currentNumber = '';
+//     }
 
-  if((typedValue.includes('x'))) {
-    //Grab the position of where the x sign is
-    let xPosition = typedValue.indexOf('x');
-    let firstX = typedValue[xPosition - 1];
-    let secondX = typedValue[xPosition + 1];
-    multiRay = [];
-    multiRay.push(firstX);
-    multiRay.push(secondX);
-    console.log(multiRay);
-    let multiRayInt = multiRay.map(val => parseInt(val));
-    console.log(multiRayInt);
-    multiAnswer = multiply(multiRayInt);
-  };
-  typedA.textContent = multiAnswer;
+function checkAround(arr, i, name) {
+  arr.push(sortedTypedValue[i - 1]);
+  arr.push(sortedTypedValue[i + 1]);
+  console.log(name + arr);
 };
+
+// function choose(operator, arr, i, lookFor, name) {
+//   else if (sortedTypedValue[i] === operator && sortedTypedValue[i - 2] === lookFor) {
+//     arr.push(sortedTypedValue[i - 1]);
+//     arr.push(sortedTypedValue[i + 1]);
+//     console.log(name + arr) 
+//   }
+// }
+
+//----------------------------------------------------------------------------------------------//
+//I need to make it so that the user cannot make their first input an operator and that they can't use two operators in a row
+    let calculations = function() {
+      console.log("This is the array that the calc function is using " + sortedTypedValue)
+      const multiPos = []; //For positive multiplication
+      const multiNeg = []; //For negative multiplication
+      const multiMulti = []; // For multiplication on multiplication 
+      for (let i = 0; i < sortedTypedValue.length; i++) {
+        //When x has a positive number before it
+        if (sortedTypedValue[i] === 'x' && sortedTypedValue[i - 2] === '+') {
+          checkAround(multiPos, i, "multiPos = ");
+        } //When x has a negative number before it
+        else if (sortedTypedValue[i] === 'x' && sortedTypedValue[i - 2] === '-') {
+          checkAround(multiNeg, i, "multiNeg = ");
+        } //When x has a multiplication number before it
+        else if (sortedTypedValue[i] === 'x' && sortedTypedValue[i - 2] === 'x') {
+            for (let z = i - 2; sortedTypedValue[z] === 'x'; z--) {
+              checkAround(multiMulti, z, "multiMulti = ");
+            }
+        }
+      }
+      typedA.textContent = multiPos;
+    
+    }
+    
+      //Grab the position of where the x sign is
+//       if((typedValue.includes('x'))) {
+//       let xPosition = typedValue.indexOf('x');
+//       let firstX = typedValue[xPosition - 1];
+//       let secondX = typedValue[xPosition + 1];
+//       multiRay = [];
+//       multiRay.push(firstX);
+//       multiRay.push(secondX);
+//       //console.log(multiRay);
+//       let multiRayInt = multiRay.map(val => parseInt(val));
+//       //console.log(multiRayInt);
+//       multiAnswer = multiply(multiRayInt);
+//     };
+//     typedA.textContent = multiAnswer;
+//   }
+  
+// };
 
 //Issues with the above logic: 
 //Doesn't register numbers above one digit
@@ -308,9 +360,9 @@ btnCreator(buttonEqual, "=");
 buttonEqual.style.width = "44%";
 buttonEqual.addEventListener('click', function() {
     //storeValue("=");
-    calculations();
     sortedTypedValue = combineNumbers(typedValue);
-    console.log("Bro " + sortedTypedValue)
+    calculations();
+    
   });
 
 
