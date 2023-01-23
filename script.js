@@ -106,6 +106,8 @@ function checkAround(arr, i, name) {
 
 let answerLog = [];
 
+
+
 const multiply = function(array) {
   answer = array.reduce((total, prop) => total * prop);
   console.log(answer);
@@ -121,9 +123,17 @@ const multiply = function(array) {
 
 const sum = function(array) {
   if(array.length >= 1) {
-    return array.reduce((total, prop) => total + prop);
+    answer = array.map(a => Number(a)).reduce((total, prop) => total + prop);
+
+    answerLog.push(answer);
+    typedV.textContent = answerLog[answerLog.length - 1] + " + ";
+    typedA.textContent = answerLog[answerLog.length - 1]
+
+    console.log("This is the answerLog for '+' = " + answerLog[answerLog.length - 1])
+    console.log("answerLog = " + answerLog)
+
   } else {
-    return 0;
+    answer = 0;
   }
 };
 
@@ -143,7 +153,7 @@ function operate() {
     if (sortedTypedValue[1] === 'x') {
       multiply(arrOperate);
     } else if (sortedTypedValue[1] === '+') {
-
+        sum(arrOperate);
     }
     // After the first calculation, when an operator is pressed
   } else if (sortedTypedValue.length > 4 && sortedTypedValue.length % 2 === 0) {
@@ -152,10 +162,10 @@ function operate() {
     arrOperate.push(answer);
     arrOperate.push(sortedTypedValue[stvTrack - 2]);
     console.log(arrOperate); 
-    if (sortedTypedValue[1] === 'x') {
+    if (sortedTypedValue[sortedTypedValue.length - 1] === 'x') {
       multiply(arrOperate);
-    } else if (sortedTypedValue[1] === '+') {
-
+    } else if (sortedTypedValue[sortedTypedValue.length - 1] === '+') {
+        sum(arrOperate);
     }
   } else if (sortedTypedValue.length > 4 && sortedTypedValue.length % 2 !== 0) {
     // arrOperate = [];
@@ -202,6 +212,12 @@ let storeValue = function(number) {
   } 
 
 };
+
+function changeChar(operator) {
+  if (sortedTypedValue > 3) {
+    typedV.textContent = answerLog[answerLog.length - 1] + operator;
+  }
+}
 
 let clearValue = function() {
     typedValue = [];
@@ -265,8 +281,7 @@ const buttonPlus = document.createElement('btn');
 btnCreator(buttonPlus, "+");
 buttonPlus.addEventListener('click', function() {
     storeValue("+");
-    sortedTypedValue = combineNumbers(typedValue)
-    operate(sortedTypedValue);
+    changeChar(" + ");
   });
 
 const buttonFour = document.createElement('btn');
@@ -317,6 +332,7 @@ const buttonMultiply = document.createElement('btn');
 btnCreator(buttonMultiply, "x");
 buttonMultiply.addEventListener('click', function() {
     storeValue("x");
+    //typedV.textContent = answerLog[answerLog.length - 1] + " x ";
   });
 
 const buttonZero = document.createElement('btn');
@@ -340,7 +356,7 @@ buttonEqual.addEventListener('click', function() {
     storeValue("=");
     
     if (sortedTypedValue.length > 4) {
-      typedV.textContent = answerLog[answerLog.length - 2] + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]  + " =";
+      typedV.textContent = answerLog + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]  + " =";
     } else {
       typedV.textContent = sortedTypedValue.join(' ');
     }
