@@ -71,16 +71,13 @@ let multiAnswer = 0;
 let typedValue = [];
 let sortedTypedValue = 0;
 let joinedNumbers = 0;
-
+let answer = 0;
+let arrOperate = [];
 const typedV = document.createElement('div');
 equationContainer.appendChild(typedV);
 
 const typedA = document.createElement('div');
 answerContainer.appendChild(typedA);
-
-const multiply = function(array) {
-  return array.reduce((total, prop) => total * prop);
-}; 
 
 function combineNumbers(arr) {
   const combined = [];
@@ -122,6 +119,14 @@ function checkAround(arr, i, name) {
   console.log(name + arr);
 };
 
+// function checkAround(arr, i, name) {
+//   arr.push(sortedTypedValue[i - 1]);
+//   arr.push(sortedTypedValue[i + 1]);
+//   sortedTypedValue.splice(sortedTypedValue[i - 1]);
+//   sortedTypedValue.splice(sortedTypedValue[i + 1]);
+//   console.log(name + arr);
+// };
+
 // function choose(operator, arr, i, lookFor, name) {
 //   else if (sortedTypedValue[i] === operator && sortedTypedValue[i - 2] === lookFor) {
 //     arr.push(sortedTypedValue[i - 1]);
@@ -132,29 +137,75 @@ function checkAround(arr, i, name) {
 
 //----------------------------------------------------------------------------------------------//
 //I need to make it so that the user cannot make their first input an operator and that they can't use two operators in a row
-    let calculations = function() {
-      console.log("This is the array that the calc function is using " + sortedTypedValue)
-      const multiPos = []; //For positive multiplication
-      const multiNeg = []; //For negative multiplication
-      const multiMulti = []; // For multiplication on multiplication 
-      for (let i = 0; i < sortedTypedValue.length; i++) {
-        //When x has a positive number before it
-        if (sortedTypedValue[i] === 'x' && sortedTypedValue[i - 2] === '+') {
-          checkAround(multiPos, i, "multiPos = ");
-        } //When x has a negative number before it
-        else if (sortedTypedValue[i] === 'x' && sortedTypedValue[i - 2] === '-') {
-          checkAround(multiNeg, i, "multiNeg = ");
-        } //When x has a multiplication number before it
-        else if (sortedTypedValue[i] === 'x' && sortedTypedValue[i - 2] === 'x') {
-            for (let z = i - 2; sortedTypedValue[z] === 'x'; z--) {
-              checkAround(multiMulti, z, "multiMulti = ");
-            }
-        }
-      }
-      typedA.textContent = multiPos;
     
-    }
+const multiPos = []; //For positive multiplication
+const multiNeg = []; //For negative multiplication
+const multiMulti = []; // For multiplication on multiplication 
+
+// let calculations = function() {
+//       console.log("This is the array that the calc function is using " + sortedTypedValue)
+//       for (let i = 0; i < sortedTypedValue.length; i++) {
+//         //When x has a multiplication number before it
+//         if (sortedTypedValue[i] === 'x' && sortedTypedValue[i + 2] === 'x') {
+//           for (let z = i + 2; sortedTypedValue[z] === 'x'; z--) {
+//             checkAround(multiMulti, z, "multiMulti = ");
+//           }
+//       } //When x has a positive number before it
+//         else if (sortedTypedValue[i] === 'x' && sortedTypedValue[i - 2] === '+' || i === 1) {
+//           checkAround(multiPos, i, "multiPos = ");
+//         } //When x has a negative number before it
+//         else if (sortedTypedValue[i] === 'x' && sortedTypedValue[i - 2] === '-') {
+//           checkAround(multiNeg, i, "multiNeg = ");
+//         } 
+//       }
+//       typedA.textContent = multiPos;
     
+//     }
+      /*
+          calculations function explained:
+          
+          Step a - break the sortedTypedValue array up
+          1a) If the value in the array is "x", check the next operator to the right. 
+          2a) Depending on the value the operator is, store it in it's own array to then by calculated separately
+          
+          Step b - 
+
+
+      */
+
+      /* 
+      The operator before a number is called a opType
+
+      The number operator after a number is called a opConnect
+
+      Numbers can be chained together through opConnect but only if they share the same opConnect
+
+      Numbers needs to be sorted into arrays based off their opConnect value and the opType value of the first number
+      
+      */
+
+      // function sortDirection (operatorType, number, connectType) {
+      //   if (operatorType === 'x' && connectType === 'x') {
+      //     multiMulti.push(number);
+      //   }
+      // }
+
+      // let calculations = function() {
+      //   console.log("This is the array that the calc function is using " + sortedTypedValue)
+      //   for (let i = 0; i < sortedTypedValue.length && typeof i === 'number'; i++) {
+      //     let operatorType = sortedTypedValue[i - 1];
+      //     let number = i;
+      //     let connectType = sortedTypedValue[i + 1];
+      //     sortDirection(operatorType, number, connectType);
+      //     //If there is a chain of the same operators, push them all into the array the belong into
+      //     if (connectType === operatorType || i === 0) {
+      //       for (let z = i + 3; sortedTypedValue[z] === connectType; z += 2) {
+      //         sortDirection(operatorType, number, connectType);
+      //       }
+      //     }
+      //   }
+      // }
+
       //Grab the position of where the x sign is
 //       if((typedValue.includes('x'))) {
 //       let xPosition = typedValue.indexOf('x');
@@ -230,9 +281,119 @@ function checkAround(arr, i, name) {
 //30 * 3 - 50 / 2 + 7 / 2 - 5 * 3 / 2 * 3 = 46
 //101 + 40 + 3 - 30 * 3 - 50 / 2 + 7 / 2 -  5 * 3 / 2 * 3 = 10
 
+/*
+New Calc Functionality
+
+After typed the first number: 
+number shows up in the 
+
+
+*/
+let answerLog = [];
+
+const multiply = function(array) {
+  answer = array.reduce((total, prop) => total * prop);
+  console.log(answer);
+  //typedA.textContent = answer;
+  
+  answerLog.push(answer);
+  typedV.textContent = answerLog[answerLog.length - 1] + " x ";
+  typedA.textContent = answerLog[answerLog.length - 1]
+
+  console.log("This is the answerLog = " + answerLog[answerLog.length - 1])
+  console.log("answerLog = " + answerLog)
+
+}; 
+
+const sum = function(array) {
+  if(array.length >= 1) {
+    return array.reduce((total, prop) => total + prop);
+  } else {
+    return 0;
+  }
+};
+
+let stvTrack = 0;
+
+function operate() {
+  console.log("The operate function was activated when the length was " + sortedTypedValue.length); 
+  if (sortedTypedValue.length === 4) {
+    arrOperate = [];
+    arrOperate.push(sortedTypedValue[0]);
+    console.log("sortedTypedValue[0] = " + sortedTypedValue[0])
+    arrOperate.push(sortedTypedValue[2]);
+    console.log("sortedTypedValue[2] = " + sortedTypedValue[2])
+
+    console.log(arrOperate); 
+    console.log("Activated sortedTypedValue.length === 4")
+    if (sortedTypedValue[1] === 'x') {
+      multiply(arrOperate);
+    } else if (sortedTypedValue[1] === '+') {
+
+    }
+    // After the first calculation, when an operator is pressed
+  } else if (sortedTypedValue.length > 4 && sortedTypedValue.length % 2 === 0) {
+    arrOperate = [];
+    stvTrack = sortedTypedValue.length;
+    //arrOperate.push(sortedTypedValue[stvTrack - 4]);
+    arrOperate.push(answer);
+    arrOperate.push(sortedTypedValue[stvTrack - 2]);
+    console.log(arrOperate); 
+    if (sortedTypedValue[1] === 'x') {
+      multiply(arrOperate);
+    } else if (sortedTypedValue[1] === '+') {
+
+    }
+  } else if (sortedTypedValue.length > 4 && sortedTypedValue.length % 2 !== 0) {
+    // arrOperate = [];
+    // stvTrack = sortedTypedValue.length;
+    // //arrOperate.push(sortedTypedValue[stvTrack - 4]);
+    // arrOperate.push(answer);
+    // arrOperate.push(sortedTypedValue[stvTrack - 1]);
+    // console.log(arrOperate); 
+    // if (sortedTypedValue[sortedTypedValue.length] === 'x') {
+    //   multiply(arrOperate);
+    // } else if (sortedTypedValue[1] === '+') {
+
+    // }
+  }
+}
+
+// let storeValue = function(number) {
+//     typedValue.push(number);
+//     typedV.textContent = typedValue.join('');
+//     console.log("This is typedValue = " + typedValue);
+// };
+
+let tvTrack = 0;
+let tvNow = 0;
+let altSwitch = [];
+
 let storeValue = function(number) {
-    typedValue.push(number);
-    typedV.textContent = typedValue.join('');
+  typedValue.push(number);
+  
+  //typedV.textContent = typedValue.join(''); This line adds to the
+  sortedTypedValue = combineNumbers(typedValue);
+  operate(sortedTypedValue);
+
+  console.log("sortedTypedValue length = " + sortedTypedValue.length)
+  console.log("sortedTypedValue = " + sortedTypedValue)
+
+  if (number === 'x' || number === '%' || number === '/' || number === '+' || number === '-') {
+    altSwitch = [];
+  }
+  
+  if (sortedTypedValue.length < 2) {
+    
+    typedA.textContent = sortedTypedValue.join(' ');
+ 
+  } else if (sortedTypedValue.length < 4 && sortedTypedValue.length % 2 === 0) {
+    typedV.textContent = sortedTypedValue.join(' ');
+
+  } else if (sortedTypedValue.length % 2 !== 0) {
+    typedA.textContent = sortedTypedValue[sortedTypedValue.length - 1];
+  } 
+
 };
 
 let clearValue = function() {
@@ -263,105 +424,138 @@ const buttonPercent = document.createElement('btn');
 btnCreator(buttonPercent, "%");
 buttonPercent.addEventListener('click', function() {
     storeValue("%");
+    sortedTypedValue = combineNumbers(typedValue)
+    operate(sortedTypedValue);
   });
 
 const buttonDivide = document.createElement('btn');
 btnCreator(buttonDivide, "/");
 buttonDivide.addEventListener('click', function() {
     storeValue("/");
+    sortedTypedValue = combineNumbers(typedValue)
+    //operate(sortedTypedValue);
   });
 
 const buttonSeven = document.createElement('btn');
 btnCreator(buttonSeven, "7");
 buttonSeven.addEventListener('click', function() {
     storeValue(7);
+   // sortedTypedValue = combineNumbers(typedValue)
+    //operate(sortedTypedValue);
   });
 
 const buttonEight = document.createElement('btn');
 btnCreator(buttonEight, 8);
 buttonEight.addEventListener('click', function() {
     storeValue(8);
+    //sortedTypedValue = combineNumbers(typedValue)
+    //operate(sortedTypedValue);
   });
 
 const buttonNine = document.createElement('btn');
 btnCreator(buttonNine, "9");
 buttonNine.addEventListener('click', function() {
     storeValue(9);
+    //sortedTypedValue = combineNumbers(typedValue)
+    //operate(sortedTypedValue);
   });
 
 const buttonPlus = document.createElement('btn');
 btnCreator(buttonPlus, "+");
 buttonPlus.addEventListener('click', function() {
     storeValue("+");
+    sortedTypedValue = combineNumbers(typedValue)
+    operate(sortedTypedValue);
   });
 
 const buttonFour = document.createElement('btn');
 btnCreator(buttonFour, "4");
 buttonFour.addEventListener('click', function() {
     storeValue(4);
+    //sortedTypedValue = combineNumbers(typedValue)
+    //operate(sortedTypedValue);
   });
 
 const buttonFive = document.createElement('btn');
 btnCreator(buttonFive, "5");
 buttonFive.addEventListener('click', function() {
     storeValue(5);
+    //sortedTypedValue = combineNumbers(typedValue)
+    //operate(sortedTypedValue);
   });
 
 const buttonSix = document.createElement('btn');
 btnCreator(buttonSix, "6");
 buttonSix.addEventListener('click', function() {
     storeValue(6);
+    //sortedTypedValue = combineNumbers(typedValue)
+    //operate(sortedTypedValue);
   });
 
 const buttonSubtract = document.createElement('btn');
 btnCreator(buttonSubtract, "-");
 buttonSubtract.addEventListener('click', function() {
     storeValue("-");
+    sortedTypedValue = combineNumbers(typedValue)
+    operate(sortedTypedValue);
   });
 
 const buttonOne = document.createElement('btn');
 btnCreator(buttonOne, "1");
 buttonOne.addEventListener('click', function() {
     storeValue(1);
+    //sortedTypedValue = combineNumbers(typedValue)
+    //operate(sortedTypedValue);
   });
 
 const buttonTwo = document.createElement('btn');
 btnCreator(buttonTwo, "2");
 buttonTwo.addEventListener('click', function() {
     storeValue(2);
+    //sortedTypedValue = combineNumbers(typedValue)
+    //operate(sortedTypedValue);
   });
 
 const buttonThree = document.createElement('btn');
 btnCreator(buttonThree, "3");
 buttonThree.addEventListener('click', function() {
     storeValue(3);
+    //sortedTypedValue = combineNumbers(typedValue)
+    //operate(sortedTypedValue);
   });
 
 const buttonMultiply = document.createElement('btn');
 btnCreator(buttonMultiply, "x");
 buttonMultiply.addEventListener('click', function() {
     storeValue("x");
+    //sortedTypedValue = combineNumbers(typedValue)
+    //operate(sortedTypedValue);
   });
 
 const buttonZero = document.createElement('btn');
 btnCreator(buttonZero, "0");
 buttonZero.addEventListener('click', function() {
     storeValue(0);
+    //sortedTypedValue = combineNumbers(typedValue)
+    //operate(sortedTypedValue);
   });
 
 const buttonPoint = document.createElement('btn');
 btnCreator(buttonPoint, ".");
 buttonPoint.addEventListener('click', function() {
     storeValue(".");
+    sortedTypedValue = combineNumbers(typedValue)
+    operate(sortedTypedValue);
   });
 
 const buttonEqual = document.createElement('btn');
 btnCreator(buttonEqual, "=");
 buttonEqual.style.width = "44%";
 buttonEqual.addEventListener('click', function() {
-    //storeValue("=");
-    sortedTypedValue = combineNumbers(typedValue);
-    calculations();
+    storeValue("=");
+    //sortedTypedValue = combineNumbers(typedValue);
+    //calculations();
+    //operate(sortedTypedValue);
     
   });
 
