@@ -70,9 +70,13 @@ buttonContainer.appendChild(button);
 let multiAnswer = 0;
 let typedValue = [];
 let sortedTypedValue = 0;
-let joinedNumbers = 0;
 let answer = 0;
 let arrOperate = [];
+let answerLog = [];
+let stvTrack = 0;
+let operators = ["x", "+", "-", "/", "%"];
+let lastOperator = [];
+
 const typedV = document.createElement('div');
 equationContainer.appendChild(typedV);
 
@@ -98,21 +102,14 @@ function combineNumbers(arr) {
   return combined;
 }
 
-function checkAround(arr, i, name) {
-  arr.push(sortedTypedValue[i - 1]);
-  arr.push(sortedTypedValue[i + 1]);
-  console.log(name + arr);
-};
-
-let answerLog = [];
-
-
 function appendAnswer() {
+  if (operators.includes(sortedTypedValue[sortedTypedValue.length - 1])) {
+    lastOperator.push(sortedTypedValue[sortedTypedValue.length - 1]);
+  }
   answerLog.push(answer);
   typedV.textContent = answerLog[answerLog.length - 1] + " " + lastOperator[lastOperator.length - 1];
   typedA.textContent = answerLog[answerLog.length - 1]  
 }
-
 
 const multiply = function(array) {
   answer = array.reduce((total, prop) => total * prop);
@@ -128,45 +125,49 @@ const sum = function(array) {
   }
 };
 
-let stvTrack = 0;
+const subtract = function(array) {
+  answer = array[0] - array[1];
+  appendAnswer();
+};
+
+const divide = function(array) {
+  answer = array[0] / array[1];
+  appendAnswer();
+};
 
 function operate() {
-  console.log("The operate function was activated when the length was " + sortedTypedValue.length); 
+  // Preparing the array to be run through it's relevant operator for the first time:
   if (sortedTypedValue.length === 4) {
     arrOperate = [];
     arrOperate.push(sortedTypedValue[0]);
-    console.log("sortedTypedValue[0] = " + sortedTypedValue[0])
     arrOperate.push(sortedTypedValue[2]);
-    console.log("sortedTypedValue[2] = " + sortedTypedValue[2])
-
-    console.log(arrOperate); 
-    console.log("Activated sortedTypedValue.length === 4")
     if (sortedTypedValue[1] === 'x') {
       multiply(arrOperate);
     } else if (sortedTypedValue[1] === '+') {
         sum(arrOperate);
+    } else if (sortedTypedValue[1] === '-') {
+      subtract(arrOperate);
+    } else if (sortedTypedValue[1] === '/') {
+      divide(arrOperate);
     }
-    // After the first calculation, when an operator is pressed
+  // After the first calculation, for every following operator pressed:
   } else if (sortedTypedValue.length > 4 && sortedTypedValue.length % 2 === 0) {
-    arrOperate = [];
-    stvTrack = sortedTypedValue.length;
-    arrOperate.push(answer.toString());
-    arrOperate.push(sortedTypedValue[stvTrack - 2]);
-    console.log(arrOperate); 
-    if (sortedTypedValue[sortedTypedValue.length - 3] === 'x') {
-      multiply(arrOperate);
-    } else if (sortedTypedValue[sortedTypedValue.length - 3] === '+') {
-        sum(arrOperate);
+      arrOperate = [];
+      stvTrack = sortedTypedValue.length;
+      arrOperate.push(answer.toString());
+      arrOperate.push(sortedTypedValue[stvTrack - 2]);
+      let checkOp = sortedTypedValue[sortedTypedValue.length - 3];
+      if (checkOp === 'x') {
+        multiply(arrOperate);
+      } else if (checkOp === '+') {
+          sum(arrOperate);
+      } else if (checkOp === '-') {
+          subtract(arrOperate);
+      } else if (checkOp === '/') {
+          divide(arrOperate);
+      }
     }
-  }
 }
-
-
-let tvTrack = 0;
-let tvNow = 0;
-let altSwitch = [];
-let operators = ["x", "+", "-", "/", "%"]
-let lastOperator = []
 
 function answerContainerUpdates() {
   if (sortedTypedValue.length === 1) {
@@ -174,68 +175,27 @@ function answerContainerUpdates() {
   } else if (sortedTypedValue.length % 2 !== 0) {
     typedA.textContent = sortedTypedValue[sortedTypedValue.length - 1];
   } 
-
-  // Note that the answerContainer is also updated in the operator functions when processed
+  // Note that the appendAnswer() function also alters the answerContainer
 }
 
 function valueContainerUpdates() {
-  if (sortedTypedValue.length === 2) { //< 4 && sortedTypedValue.length % 2 === 0
+  if (sortedTypedValue.length === 2) {
     typedV.textContent = sortedTypedValue.join(' ');
   } else if (sortedTypedValue.length === 4 && sortedTypedValue[sortedTypedValue.length - 1] === '=') {
-    console.log("The current answerlog array looks like " + answerLog)
     typedV.textContent = sortedTypedValue[sortedTypedValue.length - 4] + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]  + " =";
   } else if (sortedTypedValue.length > 4 && sortedTypedValue[sortedTypedValue.length - 1] === '=') {
-    console.log("The current answerlog array looks like " + answerLog)
     typedV.textContent = answerLog[answerLog.length - 2] + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]  + " =";
   }
-
-  if (sortedTypedValue.length > 4 && operators.includes(sortedTypedValue[sortedTypedValue.length - 1])) {
-    let operator = sortedTypedValue[sortedTypedValue.length - 1];
-    let equation = answerLog[answerLog.length - 2] + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]
-    function endTypedA(operator) {
-      console.log("THE OPERATOR CHECK WAS DONE")
-      return equation + " " + operator;
-    }
-    
-  }
-  
-  
-  // Note that the valueContainer is also updated in the operator functions when processed
+  // Note that the appendAnswer() function also alters the equationContainer
 }
 
 let storeValue = function(number) {
-  typedValue.push(number);
-  
+  typedValue.push(number); 
   sortedTypedValue = combineNumbers(typedValue);
-
-  console.log("sortedTypedValue length = " + sortedTypedValue.length)
-  console.log("sortedTypedValue = " + sortedTypedValue)
-
-  if (operators.includes(sortedTypedValue[sortedTypedValue.length - 1])) {
-    lastOperator.push(sortedTypedValue[sortedTypedValue.length - 1]);
-  }
-
-  operate(sortedTypedValue);
+  operate();
   answerContainerUpdates();
   valueContainerUpdates();
-  // if (sortedTypedValue.length < 2) {
-    
-  //   typedA.textContent = sortedTypedValue.join(' ');
- 
-  // } else if (sortedTypedValue.length < 4 && sortedTypedValue.length % 2 === 0) {
-  //   typedV.textContent = sortedTypedValue.join(' ');
-
-  // } else if (sortedTypedValue.length % 2 !== 0) {
-  //   typedA.textContent = sortedTypedValue[sortedTypedValue.length - 1];
-  // } 
-
 };
-
-function changeChar(operator) {
-  if (sortedTypedValue > 3) {
-    typedV.textContent = answerLog[answerLog.length - 1] + operator;
-  }
-}
 
 let clearValue = function() {
     typedValue = [];
@@ -266,15 +226,12 @@ const buttonPercent = document.createElement('btn');
 btnCreator(buttonPercent, "%");
 buttonPercent.addEventListener('click', function() {
     storeValue("%");
-    sortedTypedValue = combineNumbers(typedValue)
-    operate(sortedTypedValue);
   });
 
 const buttonDivide = document.createElement('btn');
 btnCreator(buttonDivide, "/");
 buttonDivide.addEventListener('click', function() {
     storeValue("/");
-    sortedTypedValue = combineNumbers(typedValue)
   });
 
 const buttonSeven = document.createElement('btn');
@@ -299,7 +256,6 @@ const buttonPlus = document.createElement('btn');
 btnCreator(buttonPlus, "+");
 buttonPlus.addEventListener('click', function() {
     storeValue("+");
-    changeChar(" + ");
   });
 
 const buttonFour = document.createElement('btn');
@@ -324,8 +280,6 @@ const buttonSubtract = document.createElement('btn');
 btnCreator(buttonSubtract, "-");
 buttonSubtract.addEventListener('click', function() {
     storeValue("-");
-    sortedTypedValue = combineNumbers(typedValue)
-    operate(sortedTypedValue);
   });
 
 const buttonOne = document.createElement('btn');
@@ -350,7 +304,6 @@ const buttonMultiply = document.createElement('btn');
 btnCreator(buttonMultiply, "x");
 buttonMultiply.addEventListener('click', function() {
     storeValue("x");
-    //typedV.textContent = answerLog[answerLog.length - 1] + " x ";
   });
 
 const buttonZero = document.createElement('btn');
@@ -363,8 +316,6 @@ const buttonPoint = document.createElement('btn');
 btnCreator(buttonPoint, ".");
 buttonPoint.addEventListener('click', function() {
     storeValue(".");
-    sortedTypedValue = combineNumbers(typedValue)
-    operate(sortedTypedValue);
   });
 
 const buttonEqual = document.createElement('btn');
@@ -372,13 +323,6 @@ btnCreator(buttonEqual, "=");
 buttonEqual.style.width = "44%";
 buttonEqual.addEventListener('click', function() {
     storeValue("=");
-    
-    // if (sortedTypedValue.length > 4) {
-    //   typedV.textContent = answerLog + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]  + " =";
-    // } else {
-    //   typedV.textContent = sortedTypedValue.join(' ');
-    // }
-    
   });
 
 
