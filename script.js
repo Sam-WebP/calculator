@@ -107,31 +107,22 @@ function checkAround(arr, i, name) {
 let answerLog = [];
 
 
+function appendAnswer() {
+  answerLog.push(answer);
+  typedV.textContent = answerLog[answerLog.length - 1] + " " + lastOperator[lastOperator.length - 1];
+  typedA.textContent = answerLog[answerLog.length - 1]  
+}
+
 
 const multiply = function(array) {
   answer = array.reduce((total, prop) => total * prop);
-  console.log(answer);
-  
-  answerLog.push(answer);
-  typedV.textContent = answerLog[answerLog.length - 1] + " x ";
-  typedA.textContent = answerLog[answerLog.length - 1]
-
-  console.log("This is the answerLog = " + answerLog[answerLog.length - 1])
-  console.log("answerLog = " + answerLog)
-
+  appendAnswer();
 }; 
 
 const sum = function(array) {
   if(array.length >= 1) {
     answer = array.map(a => Number(a)).reduce((total, prop) => total + prop);
-
-    answerLog.push(answer);
-    typedV.textContent = answerLog[answerLog.length - 1] + " + ";
-    typedA.textContent = answerLog[answerLog.length - 1]
-
-    console.log("This is the answerLog for '+' = " + answerLog[answerLog.length - 1])
-    console.log("answerLog = " + answerLog)
-
+    appendAnswer();
   } else {
     answer = 0;
   }
@@ -159,26 +150,14 @@ function operate() {
   } else if (sortedTypedValue.length > 4 && sortedTypedValue.length % 2 === 0) {
     arrOperate = [];
     stvTrack = sortedTypedValue.length;
-    arrOperate.push(answer);
+    arrOperate.push(answer.toString());
     arrOperate.push(sortedTypedValue[stvTrack - 2]);
     console.log(arrOperate); 
-    if (sortedTypedValue[sortedTypedValue.length - 1] === 'x') {
+    if (sortedTypedValue[sortedTypedValue.length - 3] === 'x') {
       multiply(arrOperate);
-    } else if (sortedTypedValue[sortedTypedValue.length - 1] === '+') {
+    } else if (sortedTypedValue[sortedTypedValue.length - 3] === '+') {
         sum(arrOperate);
     }
-  } else if (sortedTypedValue.length > 4 && sortedTypedValue.length % 2 !== 0) {
-    // arrOperate = [];
-    // stvTrack = sortedTypedValue.length;
-    // //arrOperate.push(sortedTypedValue[stvTrack - 4]);
-    // arrOperate.push(answer);
-    // arrOperate.push(sortedTypedValue[stvTrack - 1]);
-    // console.log(arrOperate); 
-    // if (sortedTypedValue[sortedTypedValue.length] === 'x') {
-    //   multiply(arrOperate);
-    // } else if (sortedTypedValue[1] === '+') {
-
-    // }
   }
 }
 
@@ -186,30 +165,69 @@ function operate() {
 let tvTrack = 0;
 let tvNow = 0;
 let altSwitch = [];
+let operators = ["x", "+", "-", "/", "%"]
+let lastOperator = []
+
+function answerContainerUpdates() {
+  if (sortedTypedValue.length === 1) {
+    typedA.textContent = sortedTypedValue.join(' ');
+  } else if (sortedTypedValue.length % 2 !== 0) {
+    typedA.textContent = sortedTypedValue[sortedTypedValue.length - 1];
+  } 
+
+  // Note that the answerContainer is also updated in the operator functions when processed
+}
+
+function valueContainerUpdates() {
+  if (sortedTypedValue.length === 2) { //< 4 && sortedTypedValue.length % 2 === 0
+    typedV.textContent = sortedTypedValue.join(' ');
+  } else if (sortedTypedValue.length === 4 && sortedTypedValue[sortedTypedValue.length - 1] === '=') {
+    console.log("The current answerlog array looks like " + answerLog)
+    typedV.textContent = sortedTypedValue[sortedTypedValue.length - 4] + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]  + " =";
+  } else if (sortedTypedValue.length > 4 && sortedTypedValue[sortedTypedValue.length - 1] === '=') {
+    console.log("The current answerlog array looks like " + answerLog)
+    typedV.textContent = answerLog[answerLog.length - 2] + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]  + " =";
+  }
+
+  if (sortedTypedValue.length > 4 && operators.includes(sortedTypedValue[sortedTypedValue.length - 1])) {
+    let operator = sortedTypedValue[sortedTypedValue.length - 1];
+    let equation = answerLog[answerLog.length - 2] + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]
+    function endTypedA(operator) {
+      console.log("THE OPERATOR CHECK WAS DONE")
+      return equation + " " + operator;
+    }
+    
+  }
+  
+  
+  // Note that the valueContainer is also updated in the operator functions when processed
+}
 
 let storeValue = function(number) {
   typedValue.push(number);
   
   sortedTypedValue = combineNumbers(typedValue);
-  operate(sortedTypedValue);
 
   console.log("sortedTypedValue length = " + sortedTypedValue.length)
   console.log("sortedTypedValue = " + sortedTypedValue)
 
-  if (number === 'x' || number === '%' || number === '/' || number === '+' || number === '-') {
-    altSwitch = [];
+  if (operators.includes(sortedTypedValue[sortedTypedValue.length - 1])) {
+    lastOperator.push(sortedTypedValue[sortedTypedValue.length - 1]);
   }
-  
-  if (sortedTypedValue.length < 2) {
-    
-    typedA.textContent = sortedTypedValue.join(' ');
- 
-  } else if (sortedTypedValue.length < 4 && sortedTypedValue.length % 2 === 0) {
-    typedV.textContent = sortedTypedValue.join(' ');
 
-  } else if (sortedTypedValue.length % 2 !== 0) {
-    typedA.textContent = sortedTypedValue[sortedTypedValue.length - 1];
-  } 
+  operate(sortedTypedValue);
+  answerContainerUpdates();
+  valueContainerUpdates();
+  // if (sortedTypedValue.length < 2) {
+    
+  //   typedA.textContent = sortedTypedValue.join(' ');
+ 
+  // } else if (sortedTypedValue.length < 4 && sortedTypedValue.length % 2 === 0) {
+  //   typedV.textContent = sortedTypedValue.join(' ');
+
+  // } else if (sortedTypedValue.length % 2 !== 0) {
+  //   typedA.textContent = sortedTypedValue[sortedTypedValue.length - 1];
+  // } 
 
 };
 
@@ -355,11 +373,11 @@ buttonEqual.style.width = "44%";
 buttonEqual.addEventListener('click', function() {
     storeValue("=");
     
-    if (sortedTypedValue.length > 4) {
-      typedV.textContent = answerLog + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]  + " =";
-    } else {
-      typedV.textContent = sortedTypedValue.join(' ');
-    }
+    // if (sortedTypedValue.length > 4) {
+    //   typedV.textContent = answerLog + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]  + " =";
+    // } else {
+    //   typedV.textContent = sortedTypedValue.join(' ');
+    // }
     
   });
 
