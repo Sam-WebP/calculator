@@ -76,6 +76,7 @@ let answerLog = [];
 let stvTrack = 0;
 let operators = ["x", "+", "-", "/", "%"];
 let lastOperator = [];
+let lastTyped = 0;
 
 const typedV = document.createElement('div');
 equationContainer.appendChild(typedV);
@@ -135,12 +136,25 @@ const divide = function(array) {
   appendAnswer();
 };
 
+const percent = function(array) {
+  answer = (array[0] / 100 * array[1]);
+  answerLog.push(answer);
+
+  console.log("The last operator is equal to " + lastOperator[lastOperator.length - 2]);
+
+  typedV.textContent = array[0] + " " + lastOperator[lastOperator.length - 2] + " " + answer;
+  typedA.textContent = answer;  
+};
+
+
+
 function operate() {
   // Preparing the array to be run through it's relevant operator for the first time:
+  let arrOperate = [];
   if (sortedTypedValue.length === 4) {
-    arrOperate = [];
     arrOperate.push(sortedTypedValue[0]);
     arrOperate.push(sortedTypedValue[2]);
+    console.log("The two numbers that are going to be used for the calculation are " + arrOperate);
     if (sortedTypedValue[1] === 'x') {
       multiply(arrOperate);
     } else if (sortedTypedValue[1] === '+') {
@@ -149,14 +163,17 @@ function operate() {
       subtract(arrOperate);
     } else if (sortedTypedValue[1] === '/') {
       divide(arrOperate);
-    }
+    } 
+
   // After the first calculation, for every following operator pressed:
   } else if (sortedTypedValue.length > 4 && sortedTypedValue.length % 2 === 0) {
       arrOperate = [];
       stvTrack = sortedTypedValue.length;
       arrOperate.push(answer.toString());
       arrOperate.push(sortedTypedValue[stvTrack - 2]);
+      console.log("The two numbers that are going to be used for the calculation are " + arrOperate);
       let checkOp = sortedTypedValue[sortedTypedValue.length - 3];
+      let checkPercent = sortedTypedValue[sortedTypedValue.length - 1];
       if (checkOp === 'x') {
         multiply(arrOperate);
       } else if (checkOp === '+') {
@@ -165,7 +182,12 @@ function operate() {
           subtract(arrOperate);
       } else if (checkOp === '/') {
           divide(arrOperate);
+      } 
+
+      if (checkPercent === '%') {
+        percent(arrOperate);
       }
+
     }
 }
 
@@ -179,12 +201,14 @@ function answerContainerUpdates() {
 }
 
 function valueContainerUpdates() {
+  let resultEnd = " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]  + " =";
+  let lastTyped = sortedTypedValue[sortedTypedValue.length - 1];
   if (sortedTypedValue.length === 2) {
     typedV.textContent = sortedTypedValue.join(' ');
-  } else if (sortedTypedValue.length === 4 && sortedTypedValue[sortedTypedValue.length - 1] === '=') {
-    typedV.textContent = sortedTypedValue[sortedTypedValue.length - 4] + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]  + " =";
-  } else if (sortedTypedValue.length > 4 && sortedTypedValue[sortedTypedValue.length - 1] === '=') {
-    typedV.textContent = answerLog[answerLog.length - 2] + " " + sortedTypedValue[sortedTypedValue.length - 3] + " " + sortedTypedValue[sortedTypedValue.length - 2]  + " =";
+  } else if (sortedTypedValue.length === 4 && lastTyped === '=') {
+    typedV.textContent = sortedTypedValue[sortedTypedValue.length - 4] + resultEnd;
+  } else if (sortedTypedValue.length > 4 && lastTyped === '=') {
+    typedV.textContent = answerLog[answerLog.length - 2] + resultEnd;
   }
   // Note that the appendAnswer() function also alters the equationContainer
 }
@@ -199,6 +223,7 @@ let storeValue = function(number) {
 
 let clearValue = function() {
     typedValue = [];
+    lastTyped = 0;
     typedV.textContent = typedValue.join('');
     multiAnswer = "";
     typedA.textContent = multiAnswer;
@@ -324,10 +349,6 @@ buttonEqual.style.width = "44%";
 buttonEqual.addEventListener('click', function() {
     storeValue("=");
   });
-
-
-
-
 
 
 
