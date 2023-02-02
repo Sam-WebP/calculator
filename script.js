@@ -91,9 +91,9 @@ function combineNumbers(arr) {
     if (typeof element === 'number') {
       currentNumber += element;
     } else {
-      combined.push(currentNumber);
-      currentNumber = '';
-      combined.push(element);
+        combined.push(currentNumber);
+        currentNumber = '';
+        combined.push(element);
     }
   }
   // push the final number, if there is one
@@ -105,7 +105,11 @@ function combineNumbers(arr) {
 
 function appendAnswer() {
   if (operators.includes(sortedTypedValue[sortedTypedValue.length - 1])) {
-    lastOperator.push(sortedTypedValue[sortedTypedValue.length - 1]);
+    if (sortedTypedValue.length === 4) {
+      lastOperator.push(sortedTypedValue[1]);
+    } else {
+        lastOperator.push(sortedTypedValue[sortedTypedValue.length - 1]);
+    }
   }
   answerLog.push(answer);
   typedV.textContent = answerLog[answerLog.length - 1] + " " + lastOperator[lastOperator.length - 1];
@@ -122,7 +126,7 @@ const sum = function(array) {
     answer = array.map(a => Number(a)).reduce((total, prop) => total + prop);
     appendAnswer();
   } else {
-    answer = 0;
+      answer = 0;
   }
 };
 
@@ -142,7 +146,7 @@ const percent = function(array) {
 
   console.log("The last operator is equal to " + lastOperator[lastOperator.length - 2]);
 
-  typedV.textContent = array[0] + " " + lastOperator[lastOperator.length - 2] + " " + answer;
+  typedV.textContent = array[0] + " " + lastOperator[lastOperator.length - 1] + " " + answer;
   typedA.textContent = answer;  
 };
 
@@ -151,6 +155,7 @@ const percent = function(array) {
 function operate() {
   // Preparing the array to be run through it's relevant operator for the first time:
   let arrOperate = [];
+  let checkPercent = sortedTypedValue[sortedTypedValue.length - 1];
   if (sortedTypedValue.length === 4) {
     arrOperate.push(sortedTypedValue[0]);
     arrOperate.push(sortedTypedValue[2]);
@@ -163,7 +168,9 @@ function operate() {
       subtract(arrOperate);
     } else if (sortedTypedValue[1] === '/') {
       divide(arrOperate);
-    } 
+    } if (checkPercent === '%') {
+      percent(arrOperate);
+    }
 
   // After the first calculation, for every following operator pressed:
   } else if (sortedTypedValue.length > 4 && sortedTypedValue.length % 2 === 0) {
@@ -173,7 +180,6 @@ function operate() {
       arrOperate.push(sortedTypedValue[stvTrack - 2]);
       console.log("The two numbers that are going to be used for the calculation are " + arrOperate);
       let checkOp = sortedTypedValue[sortedTypedValue.length - 3];
-      let checkPercent = sortedTypedValue[sortedTypedValue.length - 1];
       if (checkOp === 'x') {
         multiply(arrOperate);
       } else if (checkOp === '+') {
@@ -206,9 +212,9 @@ function valueContainerUpdates() {
   if (sortedTypedValue.length === 2) {
     typedV.textContent = sortedTypedValue.join(' ');
   } else if (sortedTypedValue.length === 4 && lastTyped === '=') {
-    typedV.textContent = sortedTypedValue[sortedTypedValue.length - 4] + resultEnd;
+      typedV.textContent = sortedTypedValue[sortedTypedValue.length - 4] + resultEnd;
   } else if (sortedTypedValue.length > 4 && lastTyped === '=') {
-    typedV.textContent = answerLog[answerLog.length - 2] + resultEnd;
+      typedV.textContent = answerLog[answerLog.length - 2] + resultEnd;
   }
   // Note that the appendAnswer() function also alters the equationContainer
 }
