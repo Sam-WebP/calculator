@@ -1,3 +1,10 @@
+/*
+I need to add user contraints to stop users from using the calculator in unintended ways. For example: 
+If the user tries to use a percentage for a number that is starting off an operation instead of at the end.
+*/
+
+
+
 const container = document.querySelector('.container');
 container.style.display = "flex";
 container.style.justifyContent = "center";
@@ -77,6 +84,8 @@ let stvTrack = 0;
 let operators = ["x", "+", "-", "/", "%"];
 let lastOperator = [];
 let lastTyped = 0;
+let endPercentLoop = 0;
+
 
 const typedV = document.createElement('div');
 equationContainer.appendChild(typedV);
@@ -110,10 +119,17 @@ function appendAnswer() {
     } else {
         lastOperator.push(sortedTypedValue[sortedTypedValue.length - 1]);
     }
-  }
+  } 
+  
   answerLog.push(answer);
+  if (endPercentLoop === 0) {
   typedV.textContent = answerLog[answerLog.length - 1] + " " + lastOperator[lastOperator.length - 1];
-  typedA.textContent = answerLog[answerLog.length - 1]  
+  typedA.textContent = answerLog[answerLog.length - 1]
+  } else {
+  //typedV.textContent = storeForAlt + "%";
+  typedA.textContent = answerLog[answerLog.length - 1];
+  }
+    
 }
 
 const multiply = function(array) {
@@ -146,31 +162,45 @@ const percent = function(array) {
 
   console.log("The last operator is equal to " + lastOperator[lastOperator.length - 2]);
 
-  typedV.textContent = array[0] + " " + lastOperator[lastOperator.length - 1] + " " + answer;
-  typedA.textContent = answer;  
+  typedV.textContent = array[0] + " " + lastOperator[lastOperator.length - 2] + " " + array[1] + "%";
+  let finalPercentCalc = [array[0], answer];
+  
+  whichFunc(lastOperator[lastOperator.length - 2], finalPercentCalc);
+  endPercentLoop = 0;
+  //typedA.textContent = answer;
+  
 };
 
+function whichFunc(operator, ray) {
+  if (operator === 'x') {
+    multiply(ray);
+  } else if (operator === '+') {
+      sum(ray);
+  } else if (operator === '-') {
+      subtract(ray);
+  } else if (operator === '/') {
+      divide(ray);
+  } 
+  let checkPercent = sortedTypedValue[sortedTypedValue.length - 1];
+  console.log("The check percent is " + checkPercent)
+  if (checkPercent === '%' && endPercentLoop === 0) {
+    endPercentLoop = 1;
+    percent(ray);
+  }
+  
+}
 
+whichFunc(sortedTypedValue[1], arrOperate);
 
 function operate() {
   // Preparing the array to be run through it's relevant operator for the first time:
   let arrOperate = [];
-  let checkPercent = sortedTypedValue[sortedTypedValue.length - 1];
+  //let checkPercent = sortedTypedValue[sortedTypedValue.length - 1];
   if (sortedTypedValue.length === 4) {
     arrOperate.push(sortedTypedValue[0]);
     arrOperate.push(sortedTypedValue[2]);
     console.log("The two numbers that are going to be used for the calculation are " + arrOperate);
-    if (sortedTypedValue[1] === 'x') {
-      multiply(arrOperate);
-    } else if (sortedTypedValue[1] === '+') {
-        sum(arrOperate);
-    } else if (sortedTypedValue[1] === '-') {
-      subtract(arrOperate);
-    } else if (sortedTypedValue[1] === '/') {
-      divide(arrOperate);
-    } if (checkPercent === '%') {
-      percent(arrOperate);
-    }
+    whichFunc(sortedTypedValue[1], arrOperate);
 
   // After the first calculation, for every following operator pressed:
   } else if (sortedTypedValue.length > 4 && sortedTypedValue.length % 2 === 0) {
@@ -180,20 +210,7 @@ function operate() {
       arrOperate.push(sortedTypedValue[stvTrack - 2]);
       console.log("The two numbers that are going to be used for the calculation are " + arrOperate);
       let checkOp = sortedTypedValue[sortedTypedValue.length - 3];
-      if (checkOp === 'x') {
-        multiply(arrOperate);
-      } else if (checkOp === '+') {
-          sum(arrOperate);
-      } else if (checkOp === '-') {
-          subtract(arrOperate);
-      } else if (checkOp === '/') {
-          divide(arrOperate);
-      } 
-
-      if (checkPercent === '%') {
-        percent(arrOperate);
-      }
-
+      whichFunc(checkOp, arrOperate);
     }
 }
 
