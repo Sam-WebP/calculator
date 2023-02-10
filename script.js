@@ -1,5 +1,5 @@
 /*
-I need to add user contraints to stop users from using the calculator in unintended ways. For example: 
+I need to add user constraints to stop users from using the calculator in unintended ways. For example: 
 If the user tries to use a percentage for a number that is starting off an operation instead of at the end.
 */
 
@@ -82,7 +82,7 @@ let arrOperate = [];
 let answerLog = [];
 let stvTrack = 0;
 let operators = ["x", "+", "-", "/", "%"];
-let lastOperator = [];
+let lastOperator = ["placeholder"];
 let lastTyped = 0;
 let endPercentLoop = 0;
 
@@ -116,6 +116,7 @@ function appendAnswer() {
   if (operators.includes(sortedTypedValue[sortedTypedValue.length - 1])) {
     if (sortedTypedValue.length === 4) {
       lastOperator.push(sortedTypedValue[1]);
+      console.log("This lastOperator was chosen " + sortedTypedValue[1] + " " + "instead of this " + sortedTypedValue[sortedTypedValue.length - 1]) 
     } else {
         lastOperator.push(sortedTypedValue[sortedTypedValue.length - 1]);
     }
@@ -123,14 +124,14 @@ function appendAnswer() {
   
   answerLog.push(answer);
   if (endPercentLoop === 0) {
-  typedV.textContent = answerLog[answerLog.length - 1] + " " + lastOperator[lastOperator.length - 1];
-  typedA.textContent = answerLog[answerLog.length - 1]
+    typedV.textContent = answerLog[answerLog.length - 1] + " " + lastOperator[lastOperator.length - 1];
+    typedA.textContent = answerLog[answerLog.length - 1]
   } else {
   //typedV.textContent = storeForAlt + "%";
-  typedA.textContent = answerLog[answerLog.length - 1];
+    typedA.textContent = answerLog[answerLog.length - 1];
   }
     
-}
+};
 
 const multiply = function(array) {
   answer = array.reduce((total, prop) => total * prop);
@@ -159,16 +160,16 @@ const divide = function(array) {
 const percent = function(array) {
   answer = (array[0] / 100 * array[1]);
   answerLog.push(answer);
-
   console.log("The last operator is equal to " + lastOperator[lastOperator.length - 2]);
 
-  typedV.textContent = array[0] + " " + lastOperator[lastOperator.length - 2] + " " + array[1] + "%";
+  if (sortedTypedValue.length === 4) {
+    typedV.textContent = array[0] + " " + lastOperator[lastOperator.length - 1] + " " + array[1] + "%";
+  } else {
+    typedV.textContent = array[0] + " " + lastOperator[lastOperator.length - 2] + " " + array[1] + "%";
+  }
   let finalPercentCalc = [array[0], answer];
-  
   whichFunc(lastOperator[lastOperator.length - 2], finalPercentCalc);
   endPercentLoop = 0;
-  //typedA.textContent = answer;
-  
 };
 
 function whichFunc(operator, ray) {
@@ -190,7 +191,7 @@ function whichFunc(operator, ray) {
   
 }
 
-whichFunc(sortedTypedValue[1], arrOperate);
+//whichFunc(sortedTypedValue[1], arrOperate);
 
 function operate() {
   // Preparing the array to be run through it's relevant operator for the first time:
