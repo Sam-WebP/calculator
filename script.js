@@ -93,19 +93,46 @@ equationContainer.appendChild(typedV);
 const typedA = document.createElement('div');
 answerContainer.appendChild(typedA);
 
+// function combineNumbers(arr) {
+//   const combined = [];
+//   let currentNumber = '';
+//   for (const element of arr) {
+//     if (typeof element === 'number') {
+//       currentNumber += element;
+//     } else {
+//         combined.push(currentNumber);
+//         currentNumber = '';
+//         combined.push(element);
+//     }
+//   } // push the final number, if there is one
+//   if (currentNumber) {
+//     combined.push(currentNumber);
+//   }
+//   return combined;
+// }
+
 function combineNumbers(arr) {
   const combined = [];
   let currentNumber = '';
+  let decimalTrack = 'false';
   for (const element of arr) {
     if (typeof element === 'number') {
       currentNumber += element;
-    } else {
+    } else if (element === '.' && decimalTrack === 'false') {
+        currentNumber += element ;
+        decimalTrack = 'true';
+    } else if (element === '.' && decimalTrack === 'true') {
+        alert("You can't type '.' more than one time in a single number!");
+        typedValue.pop();
+    }
+    
+    else {
         combined.push(currentNumber);
         currentNumber = '';
         combined.push(element);
+        decimalTrack = 'false';
     }
-  }
-  // push the final number, if there is one
+  } // push the final number, if there is one
   if (currentNumber) {
     combined.push(currentNumber);
   }
@@ -161,7 +188,6 @@ const percent = function(array) {
   answer = (array[0] / 100 * array[1]);
   answerLog.push(answer);
   console.log("The last operator is equal to " + lastOperator[lastOperator.length - 2]);
-
   if (sortedTypedValue.length === 4) {
     typedV.textContent = array[0] + " " + lastOperator[lastOperator.length - 1] + " " + array[1] + "%";
   } else {
@@ -190,8 +216,6 @@ function whichFunc(operator, ray) {
   }
   
 }
-
-//whichFunc(sortedTypedValue[1], arrOperate);
 
 function operate() {
   // Preparing the array to be run through it's relevant operator for the first time:
