@@ -13,24 +13,27 @@ container.style.position = "absolute";
 container.style.top = "50%";
 container.style.left = "50%";
 container.style.transform = "translate(-50%, -50%)";
-container.style.border = "dotted 1px white";
+container.style.border = "dotted 1px #222222";
+
 container.style.borderRadius = "20px";
 
 
 const calculatorContainer = document.createElement('div');
 calculatorContainer.classList.add('calculator')
-//calculatorContainer.style.border = "dotted 1px white";
+calculatorContainer.style.border = "solid 1px black";
 calculatorContainer.style.width = "350px";
 calculatorContainer.style.minHeight = "500px";
 calculatorContainer.style.margin = "10px";
 calculatorContainer.style.borderRadius = "10px";
+calculatorContainer.style.animation = "glowing-calc 60s linear infinite";
 //calculatorContainer.style.background = "#220b1a"; 
 //calculatorContainer.style.background = "linear-gradient(to bottom, #220b1a 0%, #808080 200%)";
+
 container.style.backdropFilter = "blur(50px)";
 container.appendChild(calculatorContainer);
 
 const screenContainer = document.createElement('div');
-screenContainer.style.border = "solid 1px white";
+screenContainer.style.border = "solid 1px black";
 screenContainer.style.margin = "7px";
 screenContainer.style.borderRadius = "10px";
 screenContainer.style.backdropFilter = "blur(100px)";
@@ -47,6 +50,7 @@ equationContainer.style.flexWrap = "wrap-reverse";
 equationContainer.style.justifyContent = "end";
 equationContainer.style.alignItems = "center";
 equationContainer.style.paddingRight = "10px";
+screenContainer.style.backgroundColor = "rgba(213, 40, 145, 0.1)";
 screenContainer.appendChild(equationContainer);
 
 const answerContainer = document.createElement('div');
@@ -531,9 +535,9 @@ buttonEqual.addEventListener('click', function() {
     // before.style.left = "1px";
     before.style.backgroundSize = "100%";
     before.style.zIndex = -1;
-    before.style.filter = "blur(5px)";
-    before.style.width = "calc(100%)";
-    before.style.height = "calc(100%)";
+    before.style.filter = "blur(2px)";
+    before.style.width = "calc(80%)";
+    before.style.height = "calc(80%)";
     before.style.animation = "glowing-button-85 20s linear infinite";
     before.style.transition = "opacity 0.3s ease-in-out";
     before.style.borderRadius = "10px";
@@ -562,7 +566,7 @@ buttonEqual.addEventListener('click', function() {
       transform: translateY(0);
     }
     20% {
-      box-shadow: 0 0 40px #ff7300;
+      box-shadow: 0 0 10px #ff7300;
       transform: translateY(-1px);
     }
     40% {
@@ -570,7 +574,7 @@ buttonEqual.addEventListener('click', function() {
       transform: translateY(0);
     }
     60% {
-      box-shadow: 0 0 40px #48ff00;
+      box-shadow: 0 0 10px #48ff00;
       transform: translateY(-1px);
     }
     80% {
@@ -578,68 +582,41 @@ buttonEqual.addEventListener('click', function() {
       transform: translateY(0);
     }
     100% {
-      box-shadow: 0 0 40px #7a00ff;
+      box-shadow: 0 0 10px #7a00ff;
       transform: translateY(-1px);
     }
   }
 
-  .basic {
-    padding: 0.6em 2em;
-    border: none;
-    outline: none;
-    color: rgb(255, 255, 255);
-    background: #111;
-    cursor: pointer;
-    position: relative;
-    z-index: 0;
-    border-radius: 10px;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    margin: 5px;
-    //margin-top: 20px;
+  @keyframes glowing-calc {
+    0% {
+      box-shadow: 0 0 3px #ff0000;
+      transform: translateY(0);
+    }
+    20% {
+      box-shadow: 0 0 100px #ff7300;
+      transform: translateY(-1px);
+    }
+    40% {
+      box-shadow: 0 0 30px #5cb3db;
+      transform: translateY(0);
+    }
+    60% {
+      box-shadow: 0 0 100px #0096FF;
+      transform: translateY(-1px);
+    }
+    80% {
+      box-shadow: 0 0 30px #00ffd5;
+      transform: translateY(0);
+    }
+    100% {
+      box-shadow: 0 0 100px #ff0000;
+      transform: translateY(-1px);
+    }
   }
-  
-  .basic:before {
-    content: "";
-    background: linear-gradient(
-      45deg,
-      #000000,
-      #9f9f9f,
-      #b4b4b4,
-      #797979,
-      #525353,
-      #292929,
-      #000000,
-      #000000,
-      #000000
-    );
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    background-size: 400%;
-    z-index: -1;
-    filter: blur(5px);
-    -webkit-filter: blur(5px);
-    width: calc(100%);
-    height: calc(100%);
-    animation: glowing-button-85 20s linear infinite;
-    transition: opacity 0.3s ease-in-out;
-    border-radius: 10px;
-  }
-  
-  .basic:after {
-    z-index: -1;
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #222;
-    left: 0;
-    top: 0;
-    border-radius: 10px;
-  }
+
   `;
+
+  
   document.head.appendChild(style);
   
   buttonEqual.style.width = "44%";
