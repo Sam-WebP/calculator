@@ -20,7 +20,7 @@ container.style.borderRadius = "20px";
 
 const calculatorContainer = document.createElement('div');
 calculatorContainer.classList.add('calculator')
-calculatorContainer.style.border = "solid 1px black";
+calculatorContainer.style.border = "solid 3px black";
 calculatorContainer.style.width = "350px";
 calculatorContainer.style.minHeight = "500px";
 calculatorContainer.style.margin = "10px";
@@ -207,7 +207,7 @@ function appendAnswer() {
   
   answerLog.push(answer);
   if (endPercentLoop === 0) {
-    typedV.textContent = answerLog[answerLog.length - 1] + " " + lastOperator[lastOperator.length - 1];
+    typedV.textContent = answerLog[answerLog.length - 1] + " " + sortedTypedValue[sortedTypedValue.length - 1];
     typedA.textContent = answerLog[answerLog.length - 1]
   } else {
   //typedV.textContent = storeForAlt + "%";
