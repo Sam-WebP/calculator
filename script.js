@@ -25,7 +25,7 @@ calculatorContainer.style.width = "350px";
 calculatorContainer.style.minHeight = "500px";
 calculatorContainer.style.margin = "10px";
 calculatorContainer.style.borderRadius = "10px";
-calculatorContainer.style.animation = "glowing-calc 60s linear infinite";
+calculatorContainer.style.animation = "glowing-calc 40s linear infinite";
 //calculatorContainer.style.background = "#220b1a"; 
 //calculatorContainer.style.background = "linear-gradient(to bottom, #220b1a 0%, #808080 200%)";
 
@@ -33,10 +33,11 @@ container.style.backdropFilter = "blur(50px)";
 container.appendChild(calculatorContainer);
 
 const screenContainer = document.createElement('div');
-screenContainer.style.border = "solid 1px black";
+screenContainer.style.border = "solid 1px white";
 screenContainer.style.margin = "7px";
 screenContainer.style.borderRadius = "10px";
 screenContainer.style.backdropFilter = "blur(100px)";
+screenContainer.style.backgroundColor = "#222222";
 calculatorContainer.appendChild(screenContainer);
 
 const equationContainer = document.createElement('div');
@@ -50,7 +51,7 @@ equationContainer.style.flexWrap = "wrap-reverse";
 equationContainer.style.justifyContent = "end";
 equationContainer.style.alignItems = "center";
 equationContainer.style.paddingRight = "10px";
-screenContainer.style.backgroundColor = "rgba(213, 40, 145, 0.1)";
+
 screenContainer.appendChild(equationContainer);
 
 const answerContainer = document.createElement('div');
@@ -589,15 +590,15 @@ buttonEqual.addEventListener('click', function() {
 
   @keyframes glowing-calc {
     0% {
-      box-shadow: 0 0 3px #ff0000;
+      box-shadow: 0 0 100px #ff0000;
       transform: translateY(0);
     }
     20% {
-      box-shadow: 0 0 100px #ff7300;
+      box-shadow: 0 0 100px #5cb3db;
       transform: translateY(-1px);
     }
     40% {
-      box-shadow: 0 0 30px #5cb3db;
+      box-shadow: 0 0 10px #ff7300;
       transform: translateY(0);
     }
     60% {
