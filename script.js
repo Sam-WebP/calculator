@@ -175,7 +175,7 @@ const sum = function(array) {
 };
 
 const subtract = function(array) {
-  answer = array[0] - array[1];
+  answer = parseFloat((array[0] - array[1]).toFixed(5));
   appendAnswer();
 };
 
