@@ -1,27 +1,43 @@
+document.body.style.backgroundImage = "url(https://deep-image.ai/blog/content/images/2022/09/a-beautiful-nebula-in-outer-space-kayptz4d.jpeg)";
+document.body.style.backgroundSize = "cover";
+
 const container = document.querySelector('.container');
 container.style.display = "flex";
 container.style.justifyContent = "center";
 container.style.alignItems = "center";
-container.style.border = "solid 5px red";
-//container.style.height = "100%";
+container.style.margin = "auto";
+//container.style.backdropFilter = "blur(5px)";
+container.style.height = "530px";
+container.style.width = "350px";
+container.style.position = "absolute";
+container.style.top = "50%";
+container.style.left = "50%";
+container.style.transform = "translate(-50%, -50%)";
+container.style.border = "dotted 1px white";
+container.style.borderRadius = "20px";
+
 
 const calculatorContainer = document.createElement('div');
 calculatorContainer.classList.add('calculator')
-calculatorContainer.style.border = "solid 3px black";
+//calculatorContainer.style.border = "dotted 1px white";
 calculatorContainer.style.width = "350px";
 calculatorContainer.style.minHeight = "500px";
 calculatorContainer.style.margin = "10px";
 calculatorContainer.style.borderRadius = "10px";
+//calculatorContainer.style.background = "#220b1a"; 
+//calculatorContainer.style.background = "linear-gradient(to bottom, #220b1a 0%, #808080 200%)";
+container.style.backdropFilter = "blur(50px)";
 container.appendChild(calculatorContainer);
 
 const screenContainer = document.createElement('div');
-screenContainer.style.border = "solid 2px red";
+screenContainer.style.border = "solid 1px white";
 screenContainer.style.margin = "7px";
 screenContainer.style.borderRadius = "10px";
+screenContainer.style.backdropFilter = "blur(100px)";
 calculatorContainer.appendChild(screenContainer);
 
 const equationContainer = document.createElement('div');
-equationContainer.style.border = "solid 1px black";
+//equationContainer.style.border = "solid 1px black";
 equationContainer.style.margin = "1px";
 equationContainer.style.minHeight = "25px";
 equationContainer.style.borderRadius = "10px";
@@ -34,7 +50,7 @@ equationContainer.style.paddingRight = "10px";
 screenContainer.appendChild(equationContainer);
 
 const answerContainer = document.createElement('div');
-answerContainer.style.border = "solid 1px black";
+//answerContainer.style.border = "solid 1px black";
 answerContainer.style.margin = "1px";
 answerContainer.style.minHeight = "35px";
 answerContainer.style.borderRadius = "10px";
@@ -51,21 +67,55 @@ const buttonContainer = document.createElement('div');
 buttonContainer.style.display = "flex";
 buttonContainer.style.flexWrap = "wrap";
 buttonContainer.style.justifyContent = "center";
-buttonContainer.style.border = "solid 2px red";
+//buttonContainer.style.border = "solid 2px white";
 buttonContainer.style.margin = "7px";
+buttonContainer.style.marginLeft = "0px";
+buttonContainer.style.marginRight = "0px";
 buttonContainer.style.height = "405px";
 buttonContainer.style.borderRadius = "10px";
 calculatorContainer.appendChild(buttonContainer);
 
+// let btnCreator = function(button, text) {
+//   button.style.width = "20%";
+//   button.style.display = "flex";
+//   button.style.justifyContent = "center";
+//   button.style.alignItems = "center";
+//   button.style.textAlign = "center";
+//   button.style.border = "solid 1px white";
+//   container.style.color = "white";
+//   button.style.borderRadius = "10px";
+//   button.style.margin = "5px";
+//   button.textContent = text;
+//   button.style.userSelect = "none";
+// buttonContainer.appendChild(button);
+// };
+
 let btnCreator = function(button, text) {
   button.style.width = "20%";
+  button.style.display = "flex";
+  button.style.justifyContent = "center";
+  button.style.alignItems = "center";
   button.style.textAlign = "center";
-  button.style.border = "solid 1px black";
+  button.style.border = "solid 1px white";
+  container.style.color = "white";
   button.style.borderRadius = "10px";
   button.style.margin = "5px";
   button.textContent = text;
-buttonContainer.appendChild(button);
+  button.style.userSelect = "none";
+  button.classList.add("button");
+  buttonContainer.appendChild(button);
+  buttonContainer.style.fontSize = "30px";
+  buttonContainer.style.textShadow = "1px 1px 10px black";
 };
+
+// Create a stylesheet to store your CSS rules
+const stylesheet = document.createElement("style");
+document.head.appendChild(stylesheet);
+
+// Add the hover class to the stylesheet
+stylesheet.sheet.insertRule(`.button:hover {
+  width: 22%;
+}`);
 
 let multiAnswer = 0;
 let typedValue = [];
@@ -322,125 +372,277 @@ document.addEventListener('keydown', function(event) {
 
 const buttonAC = document.createElement('btn');
 btnCreator(buttonAC, "AC");
+buttonAC.classList.add("opBTN");
 buttonAC.addEventListener('click', function() {
     clearValue();
   });
 
 const buttonC = document.createElement('btn');
 btnCreator(buttonC, "C");
+buttonC.classList.add("opBTN");
 buttonC.addEventListener('click', function() {
     clearLastValue();
   });
 
 const buttonPercent = document.createElement('btn');
 btnCreator(buttonPercent, "%");
+buttonPercent.classList.add("opBTN");
 buttonPercent.addEventListener('click', function() {
     storeValue("%");
   });
 
 const buttonDivide = document.createElement('btn');
 btnCreator(buttonDivide, "/");
+buttonDivide.classList.add("opBTN");
 buttonDivide.addEventListener('click', function() {
     storeValue("/");
   });
 
 const buttonSeven = document.createElement('btn');
 btnCreator(buttonSeven, "7");
+buttonSeven.classList.add("numBTN")
 buttonSeven.addEventListener('click', function() {
     storeValue(7);
   });
 
 const buttonEight = document.createElement('btn');
 btnCreator(buttonEight, 8);
+buttonEight.classList.add("numBTN")
 buttonEight.addEventListener('click', function() {
     storeValue(8);
   });
 
 const buttonNine = document.createElement('btn');
 btnCreator(buttonNine, "9");
+buttonNine.classList.add("numBTN")
 buttonNine.addEventListener('click', function() {
     storeValue(9);
   });
 
 const buttonPlus = document.createElement('btn');
 btnCreator(buttonPlus, "+");
+buttonPlus.classList.add("opBTN");
 buttonPlus.addEventListener('click', function() {
     storeValue("+");
   });
 
 const buttonFour = document.createElement('btn');
 btnCreator(buttonFour, "4");
+buttonFour.classList.add("numBTN")
 buttonFour.addEventListener('click', function() {
     storeValue(4);
   });
 
 const buttonFive = document.createElement('btn');
 btnCreator(buttonFive, "5");
+buttonFive.classList.add("numBTN")
 buttonFive.addEventListener('click', function() {
     storeValue(5);
   });
 
 const buttonSix = document.createElement('btn');
 btnCreator(buttonSix, "6");
+buttonSix.classList.add("numBTN")
 buttonSix.addEventListener('click', function() {
     storeValue(6);
   });
 
 const buttonSubtract = document.createElement('btn');
 btnCreator(buttonSubtract, "-");
+buttonSubtract.classList.add("opBTN");
 buttonSubtract.addEventListener('click', function() {
     storeValue("-");
   });
 
 const buttonOne = document.createElement('btn');
 btnCreator(buttonOne, "1");
+buttonOne.classList.add("numBTN")
 buttonOne.addEventListener('click', function() {
     storeValue(1);
   });
 
 const buttonTwo = document.createElement('btn');
 btnCreator(buttonTwo, "2");
+buttonTwo.classList.add("numBTN")
 buttonTwo.addEventListener('click', function() {
     storeValue(2);
   });
 
 const buttonThree = document.createElement('btn');
 btnCreator(buttonThree, "3");
+buttonThree.classList.add("numBTN")
 buttonThree.addEventListener('click', function() {
     storeValue(3);
   });
 
 const buttonMultiply = document.createElement('btn');
 btnCreator(buttonMultiply, "x");
+buttonMultiply.classList.add("opBTN");
 buttonMultiply.addEventListener('click', function() {
     storeValue("x");
   });
 
 const buttonZero = document.createElement('btn');
 btnCreator(buttonZero, "0");
+buttonZero.classList.add("numBTN")
 buttonZero.addEventListener('click', function() {
     storeValue(0);
   });
 
 const buttonPoint = document.createElement('btn');
 btnCreator(buttonPoint, ".");
+buttonPoint.classList.add("opBTN");
 buttonPoint.addEventListener('click', function() {
     storeValue(".");
   });
 
 const buttonEqual = document.createElement('btn');
 btnCreator(buttonEqual, "=");
+buttonEqual.classList.add("opBTN");
 buttonEqual.style.width = "44%";
 buttonEqual.addEventListener('click', function() {
     storeValue("=");
   });
 
+  // const operatorButtons = document.querySelectorAll('.opBTN');
+  // operatorButtons.forEach(operatorButton => {
+  //   operatorButton.style.background = "linear-gradient(to bottom, #808080 0%, #313638 200%)";
+  // });
 
+  const operatorButtons = document.querySelectorAll('.opBTN, .numBTN');
 
+  operatorButtons.forEach(operatorButton => {
+    operatorButton.style.width = "20%";
+    operatorButton.style.background = "linear-gradient(to bottom, #808080 0%, #313638 200%)";
+    operatorButton.style.border = "solid 1px white";
+    operatorButton.style.color = "white";
+    operatorButton.style.cursor = "pointer";
+    operatorButton.style.position = "relative";
+    operatorButton.style.zIndex = 0;
+    operatorButton.style.userSelect = "none";
+    operatorButton.style.borderRadius = "10px";
+    operatorButton.style.margin = "5px";
+  
+    const before = document.createElement("div");
+    before.style.content = "";
+    before.style.background = "linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000)";
+    before.style.position = "absolute";
+    // before.style.top = "1px";
+    // before.style.left = "1px";
+    before.style.backgroundSize = "100%";
+    before.style.zIndex = -1;
+    before.style.filter = "blur(5px)";
+    before.style.width = "calc(100%)";
+    before.style.height = "calc(100%)";
+    before.style.animation = "glowing-button-85 20s linear infinite";
+    before.style.transition = "opacity 0.3s ease-in-out";
+    before.style.borderRadius = "10px";
+  
+    const after = document.createElement("div");
+    after.style.zIndex = -1;
+    after.style.content = "";
+    after.style.position = "absolute";
+    after.style.width = "100%";
+    after.style.height = "100%";
+    after.style.background = "#222";
+    after.style.left = 0;
+    after.style.top = 0;
+    after.style.borderRadius = "10px";
+    
+    operatorButton.appendChild(before);
+    operatorButton.appendChild(after);
+  });
 
+  let style = document.createElement("style");
+  style.innerHTML = `
 
+  @keyframes glowing-button-85 {
+    0% {
+      box-shadow: 0 0 3px #ff0000;
+      transform: translateY(0);
+    }
+    20% {
+      box-shadow: 0 0 40px #ff7300;
+      transform: translateY(-1px);
+    }
+    40% {
+      box-shadow: 0 0 3px #fffb00;
+      transform: translateY(0);
+    }
+    60% {
+      box-shadow: 0 0 40px #48ff00;
+      transform: translateY(-1px);
+    }
+    80% {
+      box-shadow: 0 0 3px #00ffd5;
+      transform: translateY(0);
+    }
+    100% {
+      box-shadow: 0 0 40px #7a00ff;
+      transform: translateY(-1px);
+    }
+  }
 
-
+  .basic {
+    padding: 0.6em 2em;
+    border: none;
+    outline: none;
+    color: rgb(255, 255, 255);
+    background: #111;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    margin: 5px;
+    //margin-top: 20px;
+  }
+  
+  .basic:before {
+    content: "";
+    background: linear-gradient(
+      45deg,
+      #000000,
+      #9f9f9f,
+      #b4b4b4,
+      #797979,
+      #525353,
+      #292929,
+      #000000,
+      #000000,
+      #000000
+    );
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    width: calc(100%);
+    height: calc(100%);
+    animation: glowing-button-85 20s linear infinite;
+    transition: opacity 0.3s ease-in-out;
+    border-radius: 10px;
+  }
+  
+  .basic:after {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #222;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+  }
+  `;
+  document.head.appendChild(style);
+  
+  buttonEqual.style.width = "44%";
 
 
 
