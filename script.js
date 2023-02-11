@@ -1,10 +1,3 @@
-/*
-I need to add user constraints to stop users from using the calculator in unintended ways. For example: 
-If the user tries to use a percentage for a number that is starting off an operation instead of at the end.
-*/
-
-
-
 const container = document.querySelector('.container');
 container.style.display = "flex";
 container.style.justifyContent = "center";
@@ -65,12 +58,12 @@ buttonContainer.style.borderRadius = "10px";
 calculatorContainer.appendChild(buttonContainer);
 
 let btnCreator = function(button, text) {
-    button.style.width = "20%";
-    button.style.textAlign = "center";
-    button.style.border = "solid 1px black";
-    button.style.borderRadius = "10px";
-    button.style.margin = "5px";
-    button.textContent = text;
+  button.style.width = "20%";
+  button.style.textAlign = "center";
+  button.style.border = "solid 1px black";
+  button.style.borderRadius = "10px";
+  button.style.margin = "5px";
+  button.textContent = text;
 buttonContainer.appendChild(button);
 };
 
@@ -93,7 +86,7 @@ function consoleHelp(reason) {
   console.log("typedValue = " + typedValue);
   console.log("sortedTypedValue = " + sortedTypedValue);
   console.log("backCheck = " + backCheck);
-  console.log("------------------------------------------------------------------------------------------------------------------------------");
+  console.log("-----------------------------------------");
 }
 
 const typedV = document.createElement('div');
@@ -101,6 +94,16 @@ equationContainer.appendChild(typedV);
 
 const typedA = document.createElement('div');
 answerContainer.appendChild(typedA);
+
+function edgeCaseFix() {
+  if (operators.includes(typedValue[0]) || typedValue[0] === "." || typedValue[0] === "=") {
+    alert("You can't begin your equation with operators");
+    clearValue();
+  } else if (operators.includes(typedValue[typedValue.length - 1]) && operators.includes(typedValue[typedValue.length - 2])) {
+    alert("You can't have two operators back to back!");
+    clearValue();
+  }
+}
 
 function combineNumbers(arr) {
   const combined = [];
@@ -116,14 +119,14 @@ function combineNumbers(arr) {
         alert("You can't type '.' more than one time in a single number!");
         typedValue.pop();
     } else if (typeof element === 'number' && backCheck === 'true') {
-      currentNumber = typedValue[typedValue.length - 1];
-      console.log("backCheck was activated back to false after being positive")
-      backCheck = 'false';
-      removeZero = 'true';
+        currentNumber = typedValue[typedValue.length - 1];
+        console.log("backCheck was activated back to false after being positive")
+        backCheck = 'false';
+        removeZero = 'true';
     } else if (typeof element === 'number' && backCheck === 'false' && removeZero === 'true') {
-      currentNumber = element;
-      typedValue.splice(-2, 1);
-      removeZero = 'false';
+        currentNumber = element;
+        typedValue.splice(-2, 1);
+        removeZero = 'false';
     } else {
         combined.push(currentNumber);
         currentNumber = '';
@@ -152,6 +155,7 @@ function appendAnswer() {
     typedV.textContent = answerLog[answerLog.length - 1] + " " + lastOperator[lastOperator.length - 1];
     typedA.textContent = answerLog[answerLog.length - 1]
   } else {
+  //typedV.textContent = storeForAlt + "%";
     typedA.textContent = answerLog[answerLog.length - 1];
   }
     
@@ -258,7 +262,8 @@ function valueContainerUpdates() {
 }
 
 let storeValue = function(number) {
-  typedValue.push(number); 
+  typedValue.push(number);
+  edgeCaseFix(); 
   sortedTypedValue = combineNumbers(typedValue);
   operate();
   answerContainerUpdates();
@@ -284,7 +289,7 @@ let clearLastValue = function() {
       answerContainerUpdates();
       valueContainerUpdates();
       consoleHelp("After something was removed when there was a number before it");
-    } else if (operators.includes(typedValue[typedValue.length - 2]) || typedValue.length === 1) {
+    } else if (operators.includes(typedValue[typedValue.length - 2])) {
         backCheck = 'true';
         typedValue.pop();
         consoleHelp("Just after pop");
@@ -293,7 +298,9 @@ let clearLastValue = function() {
         sortedTypedValue.push(0);
         typedA.textContent = 0;
         consoleHelp("After something was removed when there was an operator before it");
-    }    
+      } else if (typedValue.length === 1) {
+          clearValue();
+        }
 };
 
 document.addEventListener('keydown', function(event) {
@@ -309,7 +316,7 @@ document.addEventListener('keydown', function(event) {
       storeValue("=");
   } else if (event.key === '*') {
       storeValue("x");
-  }
+  } 
     event.preventDefault()
 });
 
