@@ -102,8 +102,6 @@ equationContainer.appendChild(typedV);
 const typedA = document.createElement('div');
 answerContainer.appendChild(typedA);
 
-//let removeZero = 'false';
-
 function combineNumbers(arr) {
   const combined = [];
   let currentNumber = '';
@@ -126,9 +124,7 @@ function combineNumbers(arr) {
       currentNumber = element;
       typedValue.splice(-2, 1);
       removeZero = 'false';
-    }
-    
-    else {
+    } else {
         combined.push(currentNumber);
         currentNumber = '';
         combined.push(element);
@@ -156,7 +152,6 @@ function appendAnswer() {
     typedV.textContent = answerLog[answerLog.length - 1] + " " + lastOperator[lastOperator.length - 1];
     typedA.textContent = answerLog[answerLog.length - 1]
   } else {
-  //typedV.textContent = storeForAlt + "%";
     typedA.textContent = answerLog[answerLog.length - 1];
   }
     
@@ -222,7 +217,6 @@ function whichFunc(operator, ray) {
 function operate() {
   // Preparing the array to be run through it's relevant operator for the first time:
   let arrOperate = [];
-  //let checkPercent = sortedTypedValue[sortedTypedValue.length - 1];
   if (sortedTypedValue.length === 4) {
     arrOperate.push(sortedTypedValue[0]);
     arrOperate.push(sortedTypedValue[2]);
@@ -290,17 +284,34 @@ let clearLastValue = function() {
       answerContainerUpdates();
       valueContainerUpdates();
       consoleHelp("After something was removed when there was a number before it");
-    } else if (operators.includes(typedValue[typedValue.length - 2])) {
-      backCheck = 'true';
-      typedValue.pop();
-      consoleHelp("Just after pop");
-      typedValue.push(0);
-      consoleHelp("Just after pushing 0");
-      sortedTypedValue.push(0);
-      typedA.textContent = 0;
-      consoleHelp("After something was removed when there was an operator before it");
+    } else if (operators.includes(typedValue[typedValue.length - 2]) || typedValue.length === 1) {
+        backCheck = 'true';
+        typedValue.pop();
+        consoleHelp("Just after pop");
+        typedValue.push(0);
+        consoleHelp("Just after pushing 0");
+        sortedTypedValue.push(0);
+        typedA.textContent = 0;
+        consoleHelp("After something was removed when there was an operator before it");
     }    
 };
+
+document.addEventListener('keydown', function(event) {
+  if (event.key >= 0 && event.key <= 9) {
+    storeValue(parseInt(event.key));
+  } else if (operators.includes(event.key) || event.key === '.' || event.key === '=') {
+      storeValue(event.key);
+  } else if (event.key === 'Escape') {
+      clearValue();
+  } else if (event.key === 'Backspace') {
+      clearLastValue();
+  } else if (event.key === 'Enter') {
+      storeValue("=");
+  } else if (event.key === '*') {
+      storeValue("x");
+  }
+    event.preventDefault()
+});
 
 const buttonAC = document.createElement('btn');
 btnCreator(buttonAC, "AC");
