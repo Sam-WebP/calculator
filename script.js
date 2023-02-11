@@ -85,7 +85,16 @@ let operators = ["x", "+", "-", "/", "%"];
 let lastOperator = ["placeholder"];
 let lastTyped = 0;
 let endPercentLoop = 0;
+let backCheck = 'false';
+let removeZero = 'false';
 
+function consoleHelp(reason) {
+  console.log(reason);
+  console.log("typedValue = " + typedValue);
+  console.log("sortedTypedValue = " + sortedTypedValue);
+  console.log("backCheck = " + backCheck);
+  console.log("------------------------------------------------------------------------------------------------------------------------------");
+}
 
 const typedV = document.createElement('div');
 equationContainer.appendChild(typedV);
@@ -93,30 +102,14 @@ equationContainer.appendChild(typedV);
 const typedA = document.createElement('div');
 answerContainer.appendChild(typedA);
 
-// function combineNumbers(arr) {
-//   const combined = [];
-//   let currentNumber = '';
-//   for (const element of arr) {
-//     if (typeof element === 'number') {
-//       currentNumber += element;
-//     } else {
-//         combined.push(currentNumber);
-//         currentNumber = '';
-//         combined.push(element);
-//     }
-//   } // push the final number, if there is one
-//   if (currentNumber) {
-//     combined.push(currentNumber);
-//   }
-//   return combined;
-// }
+//let removeZero = 'false';
 
 function combineNumbers(arr) {
   const combined = [];
   let currentNumber = '';
   let decimalTrack = 'false';
   for (const element of arr) {
-    if (typeof element === 'number') {
+    if (typeof element === 'number' && backCheck === 'false' && removeZero === 'false') {
       currentNumber += element;
     } else if (element === '.' && decimalTrack === 'false') {
         currentNumber += element ;
@@ -124,6 +117,15 @@ function combineNumbers(arr) {
     } else if (element === '.' && decimalTrack === 'true') {
         alert("You can't type '.' more than one time in a single number!");
         typedValue.pop();
+    } else if (typeof element === 'number' && backCheck === 'true') {
+      currentNumber = typedValue[typedValue.length - 1];
+      console.log("backCheck was activated back to false after being positive")
+      backCheck = 'false';
+      removeZero = 'true';
+    } else if (typeof element === 'number' && backCheck === 'false' && removeZero === 'true') {
+      currentNumber = element;
+      typedValue.splice(-2, 1);
+      removeZero = 'false';
     }
     
     else {
@@ -267,6 +269,7 @@ let storeValue = function(number) {
   operate();
   answerContainerUpdates();
   valueContainerUpdates();
+  consoleHelp("At the end of the storValue function");
 };
 
 let clearValue = function() {
@@ -279,8 +282,24 @@ let clearValue = function() {
 };
 
 let clearLastValue = function() {
-    typedValue.pop();
-    typedV.textContent = typedValue.join('');
+    sortedTypedValue.pop();
+    if (typeof typedValue[typedValue.length - 2] === 'number' || typedValue[typedValue.length - 2] === '.') { 
+      typedValue.pop();
+      sortedTypedValue = combineNumbers(typedValue);
+      operate();
+      answerContainerUpdates();
+      valueContainerUpdates();
+      consoleHelp("After something was removed when there was a number before it");
+    } else if (operators.includes(typedValue[typedValue.length - 2])) {
+      backCheck = 'true';
+      typedValue.pop();
+      consoleHelp("Just after pop");
+      typedValue.push(0);
+      consoleHelp("Just after pushing 0");
+      sortedTypedValue.push(0);
+      typedA.textContent = 0;
+      consoleHelp("After something was removed when there was an operator before it");
+    }    
 };
 
 const buttonAC = document.createElement('btn');
