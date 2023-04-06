@@ -1,5 +1,7 @@
-document.body.style.backgroundImage = "url(https://deep-image.ai/blog/content/images/2022/09/a-beautiful-nebula-in-outer-space-kayptz4d.jpeg)";
+
+document.body.style.backgroundImage = "url(resources/calc-background.jpeg)";
 document.body.style.backgroundSize = "cover";
+document.body.style.fontFamily = "My Font, sans-serif";
 
 const container = document.querySelector('.container');
 container.style.display = "flex";
@@ -559,8 +561,9 @@ buttonEqual.addEventListener('click', function() {
   });
 
   let style = document.createElement("style");
-  style.innerHTML = `
 
+  style.innerHTML = `
+  
   @keyframes glowing-button-85 {
     0% {
       box-shadow: 0 0 3px #ff0000;
@@ -622,7 +625,21 @@ buttonEqual.addEventListener('click', function() {
   
   buttonEqual.style.width = "44%";
 
+  const buttons = document.querySelectorAll('.opBTN, .numBTN');
 
+  buttons.forEach(button => {
+    button.addEventListener('mouseenter', function() {
+      //this.style.fontSize = '28px';
+      this.style.borderRadius = "10px";
+      this.style.border = "solid 2px black";
+    });
+  
+    button.addEventListener('mouseleave', function() {
+      //this.style.fontSize = '30px';
+      this.style.borderRadius = "10px";
+      this.style.border = "solid 1px white";
+    });
+  });
 
 
 
