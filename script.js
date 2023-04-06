@@ -1,5 +1,5 @@
 
-document.body.style.backgroundImage = "url(resources/calc-background.jpeg)";
+document.body.style.backgroundImage = 'url("resources/calc-background.jpeg")';
 document.body.style.backgroundSize = "cover";
 document.body.style.fontFamily = "My Font, sans-serif";
 
